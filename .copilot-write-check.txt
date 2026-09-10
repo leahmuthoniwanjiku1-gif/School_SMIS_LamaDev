@@ -1,0 +1,2 @@
+write-check: Copilot edit permission test
+If you see this file, the assistant has write access and can modify files.
