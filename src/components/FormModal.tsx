@@ -10,8 +10,14 @@ import {
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { useFormState } from "react-dom";
+import {
+  Dispatch,
+  ReactElement,
+  SetStateAction,
+  useActionState,
+  useEffect,
+  useState,
+} from "react";
 import { toast } from "react-toastify";
 import { FormContainerProps } from "./FormContainer";
 
@@ -21,7 +27,7 @@ const deleteActionMap = {
   teacher: deleteTeacher,
   student: deleteStudent,
   exam: deleteExam,
-// TODO: OTHER DELETE ACTIONS
+  // TODO: OTHER DELETE ACTIONS
   parent: deleteSubject,
   lesson: deleteSubject,
   assignment: deleteSubject,
@@ -59,7 +65,7 @@ const forms: {
     type: "create" | "update",
     data?: any,
     relatedData?: any
-  ) => JSX.Element;
+  ) => ReactElement;
 } = {
   subject: (setOpen, type, data, relatedData) => (
     <SubjectForm
@@ -116,13 +122,13 @@ const FormModal = ({
     type === "create"
       ? "bg-lamaYellow"
       : type === "update"
-      ? "bg-lamaSky"
-      : "bg-lamaPurple";
+        ? "bg-lamaSky"
+        : "bg-lamaPurple";
 
   const [open, setOpen] = useState(false);
 
   const Form = () => {
-    const [state, formAction] = useFormState(deleteActionMap[table], {
+    const [state, formAction] = useActionState(deleteActionMap[table], {
       success: false,
       error: false,
     });

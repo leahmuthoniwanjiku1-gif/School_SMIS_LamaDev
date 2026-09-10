@@ -20,7 +20,11 @@ const EventCalendar = () => {
     }
   }, [value, router]);
 
-  return <Calendar onChange={onChange} value={value} />;
+  return (
+    <div suppressHydrationWarning>
+      <Calendar locale="en-US" onChange={onChange} value={value} />
+    </div>
+  );
 };
 
 export default EventCalendar;

@@ -180,6 +180,23 @@ model Announcement {
   class   Class? @relation(fields: [classId], references: [id])
 }
 
+model User {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String
+  name      String
+  email     String?  @unique
+  role      UserRole @default(STUDENT)
+  createdAt DateTime @default(now())
+}
+
+enum UserRole {
+  ADMIN
+  TEACHER
+  STUDENT
+  PARENT
+}
+
 enum UserSex {
   MALE
   FEMALE

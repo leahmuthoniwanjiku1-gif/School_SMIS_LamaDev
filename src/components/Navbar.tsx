@@ -1,15 +1,14 @@
-import { UserButton } from "@clerk/nextjs";
-import { currentUser } from "@clerk/nextjs/server";
+import { auth } from "@/auth";
 import Image from "next/image";
 
 const Navbar = async () => {
-  const user = await currentUser();
-  const fullName = [user?.firstName, user?.lastName].filter(Boolean).join(" ") || user?.username || "User";
-  const role = user?.publicMetadata?.role as string | undefined;
+  const session = await auth();
+  const user = session?.user;
+  const fullName = user?.name || user?.username || "User";
+  const role = user?.role as string | undefined;
 
   return (
     <div className="flex items-center justify-between p-4">
-      {/* SEARCH BAR */}
       <div className="hidden md:flex items-center gap-2 text-xs rounded-full ring-[1.5px] ring-gray-300 px-2">
         <Image src="/search.png" alt="" width={14} height={14} />
         <input
@@ -18,7 +17,6 @@ const Navbar = async () => {
           className="w-[200px] p-2 bg-transparent outline-none"
         />
       </div>
-      {/* ICONS AND USER */}
       <div className="flex items-center gap-6 justify-end w-full">
         <div className="bg-white rounded-full w-7 h-7 flex items-center justify-center cursor-pointer">
           <Image src="/message.png" alt="" width={20} height={20} />
@@ -35,7 +33,6 @@ const Navbar = async () => {
             {role ?? ""}
           </span>
         </div>
-        <UserButton />
       </div>
     </div>
   );

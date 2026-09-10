@@ -24,3 +24,5 @@ To learn more about Next.js, take a look at the following resources:
 
 - [Lama Dev Youtube Channel](https://youtube.com/lamadev) 
 - [Next.js](https://nextjs.org/learn)
+
+lets update to the latest stable next js version, also update the npm dependancies and packages

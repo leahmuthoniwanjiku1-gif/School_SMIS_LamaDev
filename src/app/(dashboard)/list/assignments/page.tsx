@@ -6,7 +6,7 @@ import prisma from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
 import { Assignment, Class, Prisma, Subject, Teacher } from "@prisma/client";
 import Image from "next/image";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "@/auth";
 
 type AssignmentList = Assignment & {
   lesson: {
@@ -19,14 +19,15 @@ type AssignmentList = Assignment & {
 const AssignmentListPage = async ({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | undefined };
+  searchParams: Promise<{ [key: string]: string | undefined }>;
 }) => {
-
-  const { userId, sessionClaims } = await auth();
-  const role = (sessionClaims?.metadata as { role?: string })?.role;
+  const params = await searchParams;
+  const session = await auth();
+  const userId = session?.user?.id;
+  const role = session?.user?.role;
   const currentUserId = userId;
-  
-  
+
+
   const columns = [
     {
       header: "Subject Name",
@@ -48,14 +49,14 @@ const AssignmentListPage = async ({
     },
     ...(role === "admin" || role === "teacher"
       ? [
-          {
-            header: "Actions",
-            accessor: "action",
-          },
-        ]
+        {
+          header: "Actions",
+          accessor: "action",
+        },
+      ]
       : []),
   ];
-  
+
   const renderRow = (item: AssignmentList) => (
     <tr
       key={item.id}
@@ -82,7 +83,7 @@ const AssignmentListPage = async ({
     </tr>
   );
 
-  const { page, ...queryParams } = searchParams;
+  const { page, ...queryParams } = params;
 
   const p = page ? parseInt(page) : 1;
 
